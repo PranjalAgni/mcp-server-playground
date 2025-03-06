@@ -1,10 +1,12 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import fs from "fs";
+import path from "path";
 
 // Create server instance
 const server = new McpServer({
-  name: "random-stuff",
+  name: "playground-mcp-server",
   version: "1.0.0",
 });
 
@@ -22,6 +24,25 @@ server.tool(
         {
           type: "text",
           text: answer.toString(),
+        },
+      ],
+    };
+  }
+);
+
+server.tool(
+  "get-splitwise-expenses",
+  "Fetches the splitwise expenses",
+  {},
+  () => {
+    const expenses = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "../data.json"), "utf8")
+    );
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify(expenses, null, 2),
         },
       ],
     };
