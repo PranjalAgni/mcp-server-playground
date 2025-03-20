@@ -49,10 +49,44 @@ server.tool(
   }
 );
 
+server.tool(
+  "get-xkcd-meme",
+  "Fetches and returns a random XKCD meme",
+  {},
+  async () => {
+    try {
+      const response = await fetch("https://xkcd.com/info.0.json");
+      const latestComic = await response.json();
+      const randomComicNumber = Math.floor(Math.random() * latestComic.num) + 1;
+      const randomComicResponse = await fetch(`https://xkcd.com/${randomComicNumber}/info.0.json`);
+      const randomComic = await randomComicResponse.json();
+      
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Title: ${randomComic.title}\nAlt: ${randomComic.alt}\nImage: ${randomComic.img}`,
+          },
+        ],
+      };
+    } catch (error) {
+      console.error("Error fetching XKCD meme:", error);
+      return {
+        content: [
+          {
+            type: "text",
+            text: "Failed to fetch XKCD meme.",
+          },
+        ],
+      };
+    }
+  }
+);
+
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Random stuff MCP Server running on stdio");
+  console.log("Miscallaenous tools you can find on this MCP server");
 }
 
 main().catch((error) => {
