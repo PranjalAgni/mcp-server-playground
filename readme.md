@@ -28,7 +28,7 @@ This project is a simple yet extendable MCP server that implements core MCP prim
 - **npm**: Comes bundled with Node.js.
 - **TypeScript**: Installed as a project dependency.
 
-## Installation
+## Installation steps
 
 Clone the repository and install the dependencies:
 
